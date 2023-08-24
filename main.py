@@ -24,11 +24,11 @@ async def hello():
     return {'Hello!'}
 
 
-# @app.post("/login")
-# async def login(username: Annotated[str, Form()], password: Annotated[str, Form()]):
-#     if username == '' or password == '':
-#         return status.HTTP_400_BAD_REQUEST
-#     return {"username": username}
+@app.post("/login")
+async def login(username: Annotated[str, Form()], password: Annotated[str, Form()]):
+    if username == '' or password == '':
+        return status.HTTP_400_BAD_REQUEST
+    return {"username": username}
 
 
 # @app.post("/signup")
