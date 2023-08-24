@@ -13,6 +13,8 @@ from models.hostel import Hostel
 def hello():
     print('Hwllo back')
 
+# vmerlkmblker
+ 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
 # `connect_args={"check_same_thread": False}` needed only for SQLite
