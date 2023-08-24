@@ -5,36 +5,34 @@ from fastapi import FastAPI, Form, HTTPException, Response, responses, status
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from models.hostel import Hostel
+from model.hostel import Hostel
+import crud
+import model.models
+import model.schemas
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+from sqlite3 import Connection, connect
+from model.database import SessionLocal, engine
 
 
-def hello():
-    print('Hwllo back')
+model.models.Base.metadata.create_all(bind=engine)
 
-# vmerlkmblker
- 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
-
-""" Abona """
 
 app = FastAPI(title='Hostelway',
               contact={'email': 'dzerkal.r@gmail.com'},
               description='This is the Hostelway API doc',
-              on_startup=[hello],
               version='0.1alha')
 
 
-@app.get('/')
-async def hello():
-    return {'Hello!'}
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 
 @app.post("/login")
@@ -60,3 +58,8 @@ def update_hostel_by_id(id: Annotated[int, Form()] , name: Annotated[str, Form()
         raise HTTPException(status_code=400, detail={'message': 'User not found'})
     else:
         return Hostel()
+
+
+@app.post("/signup/", response_model=model.schemas.UserModel)
+def signup(user: model.schemas.UserModel, db: Session = Depends(get_db)):
+    return crud.create_user(db, model.schemas.UserModel(id=user.id, email=user.email, name=user.name, hashed_password=user.hashed_password, role=user.role))
