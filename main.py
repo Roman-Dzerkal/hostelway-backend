@@ -1,6 +1,10 @@
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
 # from typing import Annotated
 from typing import Annotated
-import annotated_types
+import sqlite3
 from fastapi import FastAPI, Form, HTTPException, Response, responses, status
 
 from models.hostel import Hostel
@@ -9,8 +13,16 @@ from models.hostel import Hostel
 def hello():
     print('Hwllo back')
 
+SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
-""" Abona """
+# `connect_args={"check_same_thread": False}` needed only for SQLite
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
 
 app = FastAPI(title='Hostelway',
               contact={'email': 'dzerkal.r@gmail.com'},
