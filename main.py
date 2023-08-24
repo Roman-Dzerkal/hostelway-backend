@@ -63,3 +63,8 @@ def update_hostel_by_id(id: Annotated[int, Form()] , name: Annotated[str, Form()
 @app.post("/signup/", response_model=model.schemas.UserModel)
 def signup(user: model.schemas.UserModel, db: Session = Depends(get_db)):
     return crud.create_user(db, model.schemas.UserModel(id=user.id, email=user.email, name=user.name, hashed_password=user.hashed_password, role=user.role))
+
+
+@app.get("/user/", response_model=model.schemas.UserModel)
+def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+   return crud.get_user(db, user_id)
