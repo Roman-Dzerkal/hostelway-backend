@@ -1,7 +1,3 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
 # from typing import Annotated
 from typing import Annotated
 import sqlite3
@@ -13,7 +9,6 @@ from models.hostel import Hostel
 def hello():
     print('Hwllo back')
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 
 # `connect_args={"check_same_thread": False}` needed only for SQLite
 engine = create_engine(
