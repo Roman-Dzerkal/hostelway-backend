@@ -13,6 +13,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from sqlite3 import Connection, connect
 from model.database import SessionLocal, engine
+from  model.schemas import Login
 
 
 model.models.Base.metadata.create_all(bind=engine)
@@ -35,13 +36,6 @@ def get_db():
 
 
 
-@app.post("/login")
-async def login(username: Annotated[str, Form()], password: Annotated[str, Form()]):
-    if username == '' or password == '':
-        return status.HTTP_400_BAD_REQUEST
-    return {"username": username}
-
-
 # @app.post("/signup")
 # async def signup(username: Annotated[str, Form()] = '', password: Annotated[str, Form()] = '', role: Annotated[str, Form()] = '', phone_number: Annotated[str, Form()] = ''):
 #     if (username == '' or username is None) or \
@@ -62,9 +56,14 @@ def update_hostel_by_id(id: Annotated[int, Form()] , name: Annotated[str, Form()
 
 @app.post("/signup/", response_model=model.schemas.UserModel)
 def signup(user: model.schemas.UserModel, db: Session = Depends(get_db)):
-    return crud.create_user(db, model.schemas.UserModel(id=user.id, email=user.email, name=user.name, hashed_password=user.hashed_password, role=user.role))
+    return crud.create_user(db, model.schemas.UserModel(email=user.email, name=user.name, hashed_password=user.hashed_password, role=user.role))
 
 
 @app.get("/user/", response_model=model.schemas.UserModel)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
    return crud.get_user(db, user_id)
+
+
+@app.post("/signin/", response_model=model.schemas.UserModel)
+def signin(login_model: Login, db: Session = Depends(get_db)):
+   return crud.get_user(db, login_model)
