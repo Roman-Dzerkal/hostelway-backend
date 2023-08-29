@@ -1,17 +1,12 @@
 # from typing import Annotated
 from typing import Annotated
-import annotated_types
-from fastapi import FastAPI, Form, HTTPException, Response, responses, status
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from fastapi import FastAPI, Form, HTTPException
 from model.hostel import Hostel
 import crud
 import model.models
 import model.schemas
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
-from sqlite3 import Connection, connect
 from model.database import SessionLocal, engine
 from  model.schemas import Login
 
@@ -66,4 +61,4 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/signin/", response_model=model.schemas.UserModel)
 def signin(login_model: Login, db: Session = Depends(get_db)):
-   return crud.get_user(db, login_model)
+   return crud.get_user(db, login_model.email)
