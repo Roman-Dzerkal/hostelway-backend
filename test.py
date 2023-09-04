@@ -1,16 +1,23 @@
+"""import requests
+import json
+
+url = "http://127.0.0.1:8000/signin"
+
+payload = json.dumps({
+  "email": "www@gmail.com",
+  "hashed_password": "123"
+})
+headers = {
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)"""
+
 import sqlite3
 
-conn = sqlite3.connect("sql_app.db")
-cur = conn.cursor()
-
-
-cur.execute("SELECT * FROM users")
-
-list = cur.fetchall()
-
-for i in list:
-    print(i[0])
-
-cur.execute("INSERT INTO users(email, name, hashed_password, role) VALUES (?,?,?,?)", ("aaa@gmail.com", "Inna", "awdasd", "manager"))
-
+conn = sqlite3.connect('sql_app.db')
+cursor = conn.cursor()
+cursor.execute("ALTER TABLE users ADD COLUMN phone TEXT")
 conn.commit()
