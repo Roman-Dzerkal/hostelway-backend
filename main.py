@@ -49,16 +49,16 @@ def update_hostel_by_id(id: Annotated[int, Form()] , name: Annotated[str, Form()
         return Hostel()
 
 
-@app.post("/signup/", response_model=model.schemas.UserModel)
+@app.post("/signup", response_model=model.schemas.UserModel)
 def signup(user: model.schemas.UserModel, db: Session = Depends(get_db)):
     return crud.create_user(db, model.schemas.UserModel(email=user.email, name=user.name, hashed_password=user.hashed_password, role=user.role))
 
 
-@app.get("/user/", response_model=model.schemas.UserModel)
+@app.get("/user", response_model=model.schemas.UserModel)
 def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
    return crud.get_user(db, user_id)
 
 
-@app.post("/signin/", response_model=model.schemas.UserModel)
+@app.post("/signin", response_model=model.schemas.UserModel)
 def signin(login_model: Login, db: Session = Depends(get_db)):
    return crud.get_user(db, login_model.email)
