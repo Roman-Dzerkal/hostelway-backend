@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 import crud
 import model.models
+from model.models import User
 from model.database import SessionLocal, engine
 from model.hostel import Hostel
 from model.schemas import UserModel
@@ -55,6 +56,15 @@ def signup(email: str = Form(),
 # async def read_users(token: Annotated[str, Depends(oauth2_scheme)]):
 #     return {"token": token}
 
-# @app.post("/signin", response_model=model.schemas.UserModel)
-# def signin(login_model: Login, db: Session = Depends(get_db)):
-#     return crud.get_user(db, login_model.email)
+
+@app.post("/signin", response_model=model.schemas.UserModel)
+def signin(email: str = Form(),
+           password: str = Form(),
+           db: Session = Depends(get_db)):
+    return crud.get_user(db,email, password)
+
+
+@app.get("/user/{user_id}", response_model=UserModel)
+def get_user(db: Session = Depends(get_db), user_id: int =0):
+    return db.query(User).filter(User.id == user_id).first()
+
