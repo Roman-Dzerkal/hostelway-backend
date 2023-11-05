@@ -15,10 +15,13 @@ response = requests.request("POST", url, headers=headers, data=payload)
 
 print(response.text)"""
 
-
 import sqlite3
 
 conn = sqlite3.connect('sql_app.db')
 cursor = conn.cursor()
-cursor.execute("ALTER TABLE users ADD COLUMN phone TEXT")
-conn.commit()
+c = cursor.execute("SELECT * FROM users WHERE name == \'Inna\'")
+result = c.fetchone()
+
+if result is None:
+    print('Net polzovatelya')
+

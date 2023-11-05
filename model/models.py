@@ -1,6 +1,7 @@
-from pydantic import BaseModel
 from model.database import Base
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Integer, String
+
+from model.database import Base
 
 
 class User(Base):
@@ -11,5 +12,3 @@ class User(Base):
     hashed_password = Column(String)
     role = Column(String)
     phone = Column(String)
-
-
