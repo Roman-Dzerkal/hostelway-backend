@@ -47,24 +47,26 @@ def signup(email: str = Form(),
            phone: str = Form(),
            name: str = Form(),
            db: Session = Depends(get_db)):
-    crud.create_user(db, UserModel(email=email, password=password, role=role, phone=phone, name=name))
+    crud.create_user(db, email=email, password=password, role=role, phone=phone, name=name)
     return {
         'status': True,
     }
+
 
 # @app.get("/users/")
 # async def read_users(token: Annotated[str, Depends(oauth2_scheme)]):
 #     return {"token": token}
 
 
-@app.post("/signin", response_model=model.schemas.UserModel)
+@app.post("/signin", response_model=UserModel)
 def signin(email: str = Form(),
            password: str = Form(),
            db: Session = Depends(get_db)):
-    return crud.get_user(db,email, password)
+    user = crud.get_user(db, email, password)
+    return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
 
 
-@app.get("/user/{user_id}", response_model=UserModel)
-def get_user(db: Session = Depends(get_db), user_id: int =0):
-    return db.query(User).filter(User.id == user_id).first()
-
+@app.get("/user/{user_id}")
+def get_user(db: Session = Depends(get_db), user_id: int = 0):
+    user = db.query(User).filter(User.id == user_id).first()
+    return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
