@@ -66,7 +66,13 @@ def signin(email: str = Form(),
     return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
 
 
-@app.get("/user/{user_id}")
+@app.get("/users/{user_id}")
 def get_user(db: Session = Depends(get_db), user_id: int = 0):
-    user = db.query(User).filter(User.id == user_id).first()
-    return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
+    return crud.get_user_by_id(db, user_id)
+
+
+@app.put("/users/{user_id}")
+def update_user(db: Session = Depends(get_db), user_id: int = 0, email: str = Form(), name: str = Form(),
+                phone: str = Form(), role: str = Form()):
+    db.query(User).filter(User.id == user_id).update({"email": email, "name": name, "phone": phone, "role": role}, synchronize_session='evaluate')
+    db.commit()

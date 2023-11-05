@@ -18,5 +18,10 @@ def create_user(db: Session, email: str, password: str, role: str, phone: str, n
 
 
 def get_user(db: Session, user_email: str, password: str) -> Type[User] | None:
-    return db.query(User).filter(
-        User.email == user_email and User.hashed_password == utils.hash_password(password)).first()
+    return db.query(User).filter(User.email == user_email and User.hashed_password == utils.hash_password(password)).first()
+
+
+def get_user_by_id(db: Session, user_id: int):
+    user = db.query(User).filter(User.id == user_id).first()
+    return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
+
