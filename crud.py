@@ -23,5 +23,6 @@ def get_user(db: Session, user_email: str, password: str) -> Type[User] | None:
 
 def get_user_by_id(db: Session, user_id: int):
     user = db.query(User).filter(User.id == user_id).first()
+    print(user_id)
     return UserModel(id=user.id, email=user.email, name=user.name, role=user.role, phone=user.phone)
 

@@ -4,7 +4,6 @@ from fastapi import Depends
 from fastapi import FastAPI, Form, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-
 import crud
 import model.models
 from model.models import User
@@ -76,3 +75,4 @@ def update_user(db: Session = Depends(get_db), user_id: int = 0, email: str = Fo
                 phone: str = Form(), role: str = Form()):
     db.query(User).filter(User.id == user_id).update({"email": email, "name": name, "phone": phone, "role": role}, synchronize_session='evaluate')
     db.commit()
+

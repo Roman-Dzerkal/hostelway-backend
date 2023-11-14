@@ -17,7 +17,7 @@ print(response.text)"""
 
 import sqlite3
 
-conn = sqlite3.connect('sql_app.db')
+conn = sqlite3.connect('sql_app1.db')
 cursor = conn.cursor()
 c = cursor.execute("SELECT * FROM users WHERE name == \'Inna\'")
 result = c.fetchone()
